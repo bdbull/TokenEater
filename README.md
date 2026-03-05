@@ -39,18 +39,20 @@ See all features in detail on the [website](https://tokeneater.vercel.app).
 
 ## Install
 
-### Homebrew (recommended)
+### Download DMG (recommended)
+
+**[Download TokenEater.dmg](https://github.com/AThevon/TokenEater/releases/latest/download/TokenEater.dmg)**
+
+Open the DMG, drag TokenEater to Applications, then run:
+```bash
+xattr -cr /Applications/TokenEater.app
+```
+
+### Homebrew
 
 ```bash
 brew tap AThevon/tokeneater
 brew install --cask tokeneater
-```
-
-### Manual
-
-Download the latest DMG from [Releases](../../releases/latest), drag to Applications, then:
-```bash
-xattr -cr /Applications/TokenEater.app
 ```
 
 ### First Setup
@@ -68,11 +70,13 @@ If you installed via Homebrew: `brew update && brew upgrade --cask tokeneater`
 
 ## Uninstall
 
+Delete `TokenEater.app` from Applications, then optionally clean up shared data:
 ```bash
-brew uninstall --cask tokeneater
-# Optional: remove shared data
+rm -rf /Applications/TokenEater.app
 rm -rf ~/Library/Application\ Support/com.tokeneater.shared
 ```
+
+If installed via Homebrew: `brew uninstall --cask tokeneater`
 
 ## Build from source
 
