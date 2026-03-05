@@ -42,6 +42,11 @@ final class UsageStore: ObservableObject {
     private var refreshTask: Task<Void, Never>?
     private var autoRefreshTask: Task<Void, Never>?
 
+    /// Exponential backoff for 429 responses: consecutive count drives the delay.
+    private var consecutive429Count: Int = 0
+    private static let backoffBase: TimeInterval = 30
+    private static let backoffMax: TimeInterval = 300
+
     var proxyConfig: ProxyConfig?
 
     init(
@@ -87,6 +92,7 @@ final class UsageStore: ObservableObject {
             update(from: usage)
             errorState = .none
             lastFailedToken = nil
+            consecutive429Count = 0
             lastUpdate = Date()
             WidgetReloader.scheduleReload()
             notificationService.checkThresholds(
@@ -104,6 +110,7 @@ final class UsageStore: ObservableObject {
             case .keychainLocked:
                 errorState = .needsReauth
             case .httpError(429):
+                consecutive429Count += 1
                 errorState = .apiUnavailable
             default:
                 errorState = .networkError(error.localizedDescription)
@@ -149,9 +156,17 @@ final class UsageStore: ObservableObject {
             while !Task.isCancelled {
                 guard let self else { return }
                 await self.refresh(thresholds: thresholds)
-                try? await Task.sleep(for: .seconds(interval))
+                let delay = self.currentBackoffInterval(base: interval)
+                try? await Task.sleep(for: .seconds(delay))
             }
         }
+    }
+
+    /// Returns the polling interval: normal when API is healthy, exponential backoff on consecutive 429s.
+    private func currentBackoffInterval(base: TimeInterval) -> TimeInterval {
+        guard consecutive429Count > 0 else { return base }
+        let backoff = Self.backoffBase * pow(2.0, Double(consecutive429Count - 1))
+        return min(backoff, Self.backoffMax)
     }
 
     func stopAutoRefresh() {

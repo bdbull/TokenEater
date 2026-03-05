@@ -413,6 +413,34 @@ struct UsageStoreTests {
         #expect(store.opusPct == 0)
     }
 
+    // MARK: - 429 backoff
+
+    @Test("refresh sets apiUnavailable and increments backoff on 429")
+    func refreshIncrementsBackoffOn429() async {
+        let (store, _, _) = makeSUT(shouldFail: true, failWith: .httpError(429))
+
+        await store.refresh()
+
+        #expect(store.errorState == .apiUnavailable)
+    }
+
+    @Test("refresh resets backoff on success after 429")
+    func refreshResetsBackoffOnSuccess() async {
+        let (store, repo, _) = makeSUT(shouldFail: true, failWith: .httpError(429))
+
+        // First call: 429
+        await store.refresh()
+        #expect(store.errorState == .apiUnavailable)
+
+        // Fix repo and retry
+        repo.stubbedError = nil
+        repo.stubbedUsage = .fixture(fiveHourUtil: 50)
+        await store.refresh()
+
+        #expect(store.errorState == .none)
+        #expect(store.fiveHourPct == 50)
+    }
+
     // MARK: - refreshProfile
 
     @Test("refreshProfile updates plan type")
