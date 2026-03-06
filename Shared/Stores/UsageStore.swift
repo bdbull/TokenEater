@@ -44,8 +44,8 @@ final class UsageStore: ObservableObject {
 
     /// Exponential backoff for 429 responses: consecutive count drives the delay.
     private var consecutive429Count: Int = 0
-    private static let backoffBase: TimeInterval = 30
-    private static let backoffMax: TimeInterval = 300
+    private static let backoffBase: TimeInterval = 120
+    private static let backoffMax: TimeInterval = 600
 
     var proxyConfig: ProxyConfig?
 
@@ -61,8 +61,8 @@ final class UsageStore: ObservableObject {
         // Prevent concurrent refreshes — multiple .task/.onAppear can race
         guard !isLoading else { return }
 
-        // Throttle: skip if a successful refresh happened less than 20s ago (avoids 429)
-        if !force, let last = lastUpdate, Date().timeIntervalSince(last) < 20 {
+        // Throttle: skip if a successful refresh happened less than 55s ago (avoids 429)
+        if !force, let last = lastUpdate, Date().timeIntervalSince(last) < 55 {
             return
         }
 
@@ -143,12 +143,12 @@ final class UsageStore: ObservableObject {
         // Sequential: refresh first, then profile after a delay to avoid 429
         refreshTask = Task {
             await refresh(thresholds: thresholds)
-            try? await Task.sleep(for: .seconds(2))
+            try? await Task.sleep(for: .seconds(60))
             await refreshProfile()
         }
     }
 
-    func startAutoRefresh(interval: TimeInterval = 30, thresholds: UsageThresholds = .default) {
+    func startAutoRefresh(interval: TimeInterval = 120, thresholds: UsageThresholds = .default) {
         autoRefreshTask?.cancel()
         autoRefreshTask = Task { [weak self] in
             // Wait first — reloadConfig already triggers an initial refresh
@@ -203,8 +203,8 @@ final class UsageStore: ObservableObject {
 
     func refreshProfile() async {
         guard repository.isConfigured else { return }
-        // Throttle: profile rarely changes, skip if fetched less than 60s ago
-        if let last = lastProfileFetch, Date().timeIntervalSince(last) < 60 { return }
+        // Throttle: profile rarely changes, skip if fetched less than 5min ago
+        if let last = lastProfileFetch, Date().timeIntervalSince(last) < 300 { return }
         do {
             let profile = try await repository.fetchProfile(proxyConfig: proxyConfig)
             planType = PlanType(from: profile.account, organization: profile.organization)

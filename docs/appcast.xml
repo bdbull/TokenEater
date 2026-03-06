@@ -17,5 +17,11 @@
             <sparkle:version>4.7.2</sparkle:version>
             <enclosure url="https://github.com/AThevon/TokenEater/releases/download/v4.7.2/TokenEater.dmg" sparkle:edSignature="" length="2364950" type="application/octet-stream" />
         </item>
+        <item>
+            <title>4.7.3</title>
+            <pubDate>Thu, 06 Mar 2026 13:30:00 +0000</pubDate>
+            <sparkle:version>4.7.3</sparkle:version>
+            <enclosure url="https://github.com/AThevon/TokenEater/releases/download/v4.7.3/TokenEater.dmg" sparkle:edSignature="" length="0" type="application/octet-stream" />
+        </item>
     </channel>
 </rss>
