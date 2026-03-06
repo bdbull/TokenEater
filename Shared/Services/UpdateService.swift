@@ -7,7 +7,7 @@ final class UpdateService: NSObject, UpdateServiceProtocol, URLSessionDownloadDe
     private var downloadContinuation: CheckedContinuation<URL, Error>?
 
     init(
-        feedURL: URL = URL(string: "https://athevon.github.io/TokenEater/appcast.xml")!,
+        feedURL: URL = URL(string: "https://raw.githubusercontent.com/AThevon/TokenEater/main/docs/appcast.xml")!,
         currentVersion: String? = nil
     ) {
         self.feedURL = feedURL
