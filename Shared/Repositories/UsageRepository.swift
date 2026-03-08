@@ -22,6 +22,13 @@ final class UsageRepository: UsageRepositoryProtocol {
         }
     }
 
+    /// Silent Keychain sync — for boot/onboarding only. Never triggers a dialog.
+    func syncKeychainSilently() {
+        if let token = keychainService.readKeychainTokenSilently() {
+            sharedFileService.oauthToken = token
+        }
+    }
+
     var isConfigured: Bool {
         sharedFileService.isConfigured
     }
