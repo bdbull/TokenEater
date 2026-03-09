@@ -1,3 +1,5 @@
+> **Fork note:** This is a fork of [AThevon/TokenEater](https://github.com/AThevon/TokenEater) with macOS 13 Ventura support. The upstream project requires macOS 14+.
+
 <p align="center">
   <img src="TokenEaterApp/Assets.xcassets/AppIcon.appiconset/icon_256x256.png" width="128" height="128" alt="TokenEater">
 </p>
@@ -11,7 +13,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/macOS-14%2B-111?logo=apple&logoColor=white" alt="macOS 14+">
+  <img src="https://img.shields.io/badge/macOS-13%2B-111?logo=apple&logoColor=white" alt="macOS 13+">
   <img src="https://img.shields.io/badge/Swift-5.9-F05138?logo=swift&logoColor=white" alt="Swift 5.9">
   <img src="https://img.shields.io/badge/WidgetKit-native-007AFF?logo=apple&logoColor=white" alt="WidgetKit">
   <img src="https://img.shields.io/badge/Claude-Pro%20%2F%20Team-D97706" alt="Claude Pro / Team">
@@ -96,6 +98,10 @@ xcodebuild -project TokenEater.xcodeproj -scheme TokenEaterApp \
 cp -R "build/Build/Products/Release/TokenEater.app" /Applications/
 # Then approve via System Settings → Privacy & Security → Open Anyway
 ```
+
+### Building on macOS 13 Ventura
+
+This fork backports TokenEater to macOS 13. See [VENTURA.md](VENTURA.md) for full build instructions — the toolchain requirements differ (Xcode 15.2, xcodegen via pre-built binary).
 
 ## Architecture
 
