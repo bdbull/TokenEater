@@ -159,8 +159,9 @@ final class OverlayWindowController {
             object: nil,
             queue: .main
         ) { [weak self] _ in
+            guard let self else { return }
             Task { @MainActor in
-                guard let self, let p = self.panel else { return }
+                guard let p = self.panel else { return }
                 self.positionPanel(p)
                 self.overlayState.windowHeight = p.frame.height
             }

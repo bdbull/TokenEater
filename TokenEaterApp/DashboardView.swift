@@ -43,7 +43,7 @@ struct DashboardView: View {
                 refreshLastUpdateText()
             }
         }
-        .onChange(of: usageStore.lastUpdate) { _, _ in
+        .onChangeCompat(of: usageStore.lastUpdate) { _ in
             refreshLastUpdateText()
         }
     }

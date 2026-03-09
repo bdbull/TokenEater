@@ -52,7 +52,7 @@ struct PacingBar: View {
                 }
             }
         }
-        .onChange(of: actual) { _, newValue in
+        .onChangeCompat(of: actual) { newValue in
             withAnimation(.spring(response: 0.6, dampingFraction: 0.8)) {
                 animatedActual = newValue
             }
