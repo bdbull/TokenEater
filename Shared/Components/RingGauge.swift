@@ -43,7 +43,7 @@ struct RingGauge: View {
                 animatedPct = Double(percentage)
             }
         }
-        .onChange(of: percentage) { _, newValue in
+        .onChangeCompat(of: percentage) { newValue in
             withAnimation(.spring(response: 0.6, dampingFraction: 0.8)) {
                 animatedPct = Double(newValue)
             }

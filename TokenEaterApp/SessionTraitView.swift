@@ -166,7 +166,7 @@ struct SessionTraitView: View {
         .onAppear {
             updateAnimations()
         }
-        .onChange(of: session.state) { oldState, newState in
+        .onChangeCompat(of: session.state) { oldState, newState in
             let wasAttention = (oldState == .idle || oldState == .waiting)
             let isAttention = (newState == .idle || newState == .waiting)
             if !wasAttention && isAttention && proximity <= 0.15 {
@@ -176,12 +176,12 @@ struct SessionTraitView: View {
             }
             updateAnimations()
         }
-        .onChange(of: proximity > 0.15) { _, isNear in
+        .onChangeCompat(of: proximity > 0.15) { isNear in
             if isNear && nudging {
                 stopNudge()
             }
         }
-        .onChange(of: settingsStore.watcherAnimationsEnabled) { _, enabled in
+        .onChangeCompat(of: settingsStore.watcherAnimationsEnabled) { enabled in
             if enabled {
                 updateAnimations()
             } else {

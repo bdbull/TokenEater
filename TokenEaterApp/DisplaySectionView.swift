@@ -52,16 +52,16 @@ struct DisplaySectionView: View {
         }
         .padding(24)
         // Sync: local toggle -> store (with at-least-one guard)
-        .onChange(of: showFiveHour) { _, new in syncMetric(.fiveHour, on: new, revert: { showFiveHour = true }) }
-        .onChange(of: showSevenDay) { _, new in syncMetric(.sevenDay, on: new, revert: { showSevenDay = true }) }
-        .onChange(of: showSonnet) { _, new in syncMetric(.sonnet, on: new, revert: { showSonnet = true }) }
-        .onChange(of: showPacing) { _, new in
+        .onChangeCompat(of: showFiveHour) { new in syncMetric(.fiveHour, on: new, revert: { showFiveHour = true }) }
+        .onChangeCompat(of: showSevenDay) { new in syncMetric(.sevenDay, on: new, revert: { showSevenDay = true }) }
+        .onChangeCompat(of: showSonnet) { new in syncMetric(.sonnet, on: new, revert: { showSonnet = true }) }
+        .onChangeCompat(of: showPacing) { new in
             withAnimation(.easeInOut(duration: 0.2)) {
                 syncMetric(.pacing, on: new, revert: { showPacing = true })
             }
         }
         // Sync: store -> local toggles (for external changes, e.g. from MenuBar popover)
-        .onChange(of: settingsStore.pinnedMetrics) { _, metrics in
+        .onChangeCompat(of: settingsStore.pinnedMetrics) { metrics in
             if showFiveHour != metrics.contains(.fiveHour) { showFiveHour = metrics.contains(.fiveHour) }
             if showSevenDay != metrics.contains(.sevenDay) { showSevenDay = metrics.contains(.sevenDay) }
             if showSonnet != metrics.contains(.sonnet) { showSonnet = metrics.contains(.sonnet) }

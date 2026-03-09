@@ -282,10 +282,18 @@ final class StatusBarController: NSObject {
 
 extension StatusBarController: NSWindowDelegate {
     nonisolated func windowShouldClose(_ sender: NSWindow) -> Bool {
-        MainActor.assumeIsolated {
-            sender.contentViewController = nil
-            sender.orderOut(nil)
-            self.dashboardWindow = nil
+        if #available(macOS 14.0, *) {
+            MainActor.assumeIsolated {
+                sender.contentViewController = nil
+                sender.orderOut(nil)
+                self.dashboardWindow = nil
+            }
+        } else {
+            Task { @MainActor [weak self] in
+                sender.contentViewController = nil
+                sender.orderOut(nil)
+                self?.dashboardWindow = nil
+            }
         }
         return false
     }

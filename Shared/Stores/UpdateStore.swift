@@ -56,8 +56,8 @@ final class UpdateStore: ObservableObject {
         Task {
             do {
                 let fileURL = try await service.downloadUpdate(from: url) { [weak self] progress in
+                    guard let self else { return }
                     Task { @MainActor in
-                        guard let self else { return }
                         if case .downloading = self.updateState {
                             self.updateState = .downloading(progress: progress)
                         }

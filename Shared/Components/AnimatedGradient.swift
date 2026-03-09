@@ -16,7 +16,7 @@ struct AnimatedGradient: View {
 
     var body: some View {
         LinearGradient(colors: baseColors, startPoint: start, endPoint: end)
-            .onChange(of: isActive) { _, active in
+            .onChangeCompat(of: isActive) { active in
                 if active {
                     withAnimation(.easeInOut(duration: animationDuration).repeatForever(autoreverses: true)) {
                         start = UnitPoint(x: 1, y: 0)

@@ -149,7 +149,7 @@ struct MenuBarPopoverView: View {
         .onReceive(updateTimer) { _ in
             refreshLastUpdateText()
         }
-        .onChange(of: usageStore.lastUpdate) { _, _ in
+        .onChangeCompat(of: usageStore.lastUpdate) { _ in
             refreshLastUpdateText()
         }
     }

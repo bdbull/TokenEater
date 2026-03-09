@@ -100,30 +100,30 @@ struct ThemesSectionView: View {
             Spacer()
         }
         .padding(24)
-        .onChange(of: warningSlider) { _, new in
+        .onChangeCompat(of: warningSlider) { new in
             let int = Int(new)
             if themeStore.warningThreshold != int { themeStore.warningThreshold = int }
             if int >= themeStore.criticalThreshold { themeStore.criticalThreshold = min(int + 5, 95) }
         }
-        .onChange(of: criticalSlider) { _, new in
+        .onChangeCompat(of: criticalSlider) { new in
             let int = Int(new)
             if themeStore.criticalThreshold != int { themeStore.criticalThreshold = int }
             if int <= themeStore.warningThreshold { themeStore.warningThreshold = max(int - 5, 10) }
         }
-        .onChange(of: marginSlider) { _, new in
+        .onChangeCompat(of: marginSlider) { new in
             let int = Int(new)
             if settingsStore.pacingMargin != int { settingsStore.pacingMargin = int }
         }
-        .onChange(of: themeStore.warningThreshold) { _, new in
+        .onChangeCompat(of: themeStore.warningThreshold) { new in
             let d = Double(new); if warningSlider != d { warningSlider = d }
         }
-        .onChange(of: themeStore.criticalThreshold) { _, new in
+        .onChangeCompat(of: themeStore.criticalThreshold) { new in
             let d = Double(new); if criticalSlider != d { criticalSlider = d }
         }
-        .onChange(of: settingsStore.pacingMargin) { _, new in
+        .onChangeCompat(of: settingsStore.pacingMargin) { new in
             let d = Double(new); if marginSlider != d { marginSlider = d }
         }
-        .onChange(of: themeStore.selectedPreset) { oldValue, newValue in
+        .onChangeCompat(of: themeStore.selectedPreset) { oldValue, newValue in
             if newValue == "custom", let source = ThemeColors.preset(for: oldValue) {
                 themeStore.customTheme = source
             }
